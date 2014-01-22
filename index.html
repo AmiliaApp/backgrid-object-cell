@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Backgrid Object Cell</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		
+		<script src="3rd/jquery.min.js" type="text/javascript"></script>
+		<script src="3rd/bootstrap.min.js" type="text/javascript"></script>
+		<link href="3rd/bootstrap.min.css" rel="stylesheet" type="text/css" charset="utf-8">
+		
+		<script src="3rd/underscore.js" type="text/javascript"></script>
+		<script src="3rd/backbone.js" type="text/javascript"></script>
+		<script src="3rd/backgrid.js" type="text/javascript"></script>
+		
+		<script src="backgrid-object-cell.js" type="text/javascript"></script>
+		<script src="people.js" type="text/javascript"></script>
+		<script src="example.js" type="text/javascript"></script>
+		
+		<style>
+			header.navbar-inverse {border-radius: 0;}
+			footer.navbar-default {border-radius: 0; margin-bottom: 0;}
+		</style>
+	</head>
+	<body>
+		<header class="navbar navbar-inverse">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Backgrid Object Cell</a>
+			</div>
+		</header>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<p>
+						Provides two new cell (with their editors) to render and edit an object or an array of objects.
+						
+						Client side drop-down filter for <a href="https://github.com/wyuenho/backgrid">Backgrid</a>. Inspired from <a href="https://github.com/wyuenho/backgrid-filter]">backgrid-filter</a>.
+						This Backgrid extension allows you to filter using a SELECT element. Works with pagination when passed a <a href="https://github.com/wyuenho/backbone-pageable/">Backbone.PageableCollection</a>. It is designed to work on the client-side but could be extended to work server-side as well.
+					</p>
+					<p>
+						This adds a new class <code>Backgrid.Extension.SelectFilter</code> which extends a <code>Backbone.View</code>. As such, you can pass its constructor default options like <code>className</code>.
+					</p>
+					<h3>Options</h3>
+					<ul>
+						<li><strong>collection:</strong> An instance of a Backbone.Collection or a Backbone.PageableCollection.</li>
+						<li><strong>field:</strong> The Backbone model attribute to filter on.</li>
+						<li><strong>selectOptions:</strong> An array of option objects to create OPTIONs in the SELECT. Each option object must contain <em>value</em> and <em>label</em>.</li>
+						<li><strong>clearValue:</strong> Optional. Value to clear the filter. Defaults to <code>null</code>.</li>
+						<li><strong>initialValue:</strong> Optional. Value first selected. Defaults to <strong>clearValue</strong>.</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h3>Example</h3>
+					<p>Data for this example is bootstrap-loaded in <code>people.js</code> and set in global <code>_people</code>.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div id="result" class="col-md-12"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Code</h4>
+<pre>
+// Collection
+var people = new Backbone.Collection(_people);
+
+// Address cell - edit as form in modal dialog
+var AddressCell = Backgrid.Extension.ObjectCell.extend({
+	formatter: {
+		fromRaw: function(object) {
+			return _.compact([
+				object.address1 ? object.address1 : null,
+				object.address2 ? object.address2 : null,
+				object.city ? object.city : null,
+				object.state ? object.state : null
+			]).join(", ");
+		}
+	},
+	schema: [
+		{name: "address1", label: "Address1"},
+		{name: "address2", label: "Address2"},
+		{name: "city", label: "City"},
+		{name: "state", label: "State"}
+	]
+});
+
+// Children cell - edit as grid in modal dialog
+var ChildrenCell = Backgrid.Extension.ArrayObjectCell.extend({
+	formatter: {
+		fromRaw: function(array) {
+			return _.map(array, function(object) {
+				return object.firstName + " " + object.lastName + " (" + object.dob + ")"
+			}).join(", ");
+		}
+	},
+	gridOptions: {
+		columns: [
+			{name: "firstName", label: "First Name", cell: "string"},
+			{name: "lastName", label: "Last Name", cell: "string"},
+			{name: "dob", label: "Date of birth", cell: "string"}
+		]
+	}
+});
+
+// Grid
+var columns = [
+		{name: "firstName", label: "First Name", cell: "string"},
+		{name: "lastName", label: "Last Name", cell: "string"},
+		{name: "address", label: "Address", cell: AddressCell},
+		{name: "children", label: "Children", cell: ChildrenCell}
+	],
+	grid = new Backgrid.Grid({
+		columns: columns,
+		collection: people,
+		className: "backgrid table"
+	}),
+	$grid = grid.render().$el;
+$("#result").append($grid);
+</pre>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<h4>Bootstrap 2.3</h4>
+					<p>
+						Bootstrap 2.3 use requires are change in modal and form templates.
+						Replace those using this code.
+					</p>
+<pre>
+Backgrid.Extension.ObjectCellEditor.prototype.modalTemplate = _.template([
+	'&lt;div class="modal hide"&gt;',
+	'  &lt;div class="modal-header"&gt;',
+	'    &lt;a type="button" class="close" aria-hidden="true"&gt;&times;&lt;/a&gt;',
+	'    &lt;h3&gt;&lt;%=title%&gt;&lt;/h3&gt;',
+	'  &lt;/div&gt;',
+	'  &lt;div class="modal-body"&gt;&lt;/div&gt;',
+	'  &lt;div class="modal-footer"&gt;',
+	'    &lt;a href="#" class="save btn btn-primary"&gt;Save&lt;/a&gt;',
+	'    &lt;a href="#" class="close btn "&gt;Cancel&lt;/a&gt;',
+	'  &lt;/div&gt;',
+	'&lt;/div&gt;'
+].join("\n"));
+Backgrid.Extension.ObjectCellEditor.prototype.stringTemplate = _.template([
+	'&lt;div class="control-group"&gt;',
+	'  &lt;label class="control-label"&gt;&lt;%=label%&gt;&lt;/label&gt;',
+	'  &lt;div class="controls"&gt;',
+	'    &lt;input type="text" name="&lt;%=name%&gt;" value="&lt;%=value%&gt;" placeholder="&lt;%=placeholder%&gt;" /&gt;',
+	'  &lt;/div&gt;',
+	'&lt;/div&gt;'
+].join("\n"));
+</pre>
+				</div>
+			</div>
+		</div>
+		<br/>
+		<footer class="navbar navbar-default">
+				<p class="navbar-text navbar-left">&copy; 2014 <a href="http://www.amilia.com/en">Amilia Inc.</a> <a href="https://github.com/AmiliaApp/backgrid-object-cell/blob/gh-pages/LICENSE">Licensed under MIT.</a></p>
+				<p class="navbar-text navbar-right">Written by <a href="http://martindrapeau.tumblr.com/">Martin Drapeau</a></p>
+				<p class="navbar-text navbar-right">&nbsp;</p>
+		</footer>
+		<a href="https://github.com/AmiliaApp/backgrid-object-cell"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+	</body>
+</html>
