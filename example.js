@@ -46,8 +46,8 @@ $(document).ready(function() {
 	var columns = [
 			{name: "firstName", label: "First Name", cell: "string"},
 			{name: "lastName", label: "Last Name", cell: "string"},
-			{name: "address", label: "Address (ObjectCell)", cell: AddressCell},
-			{name: "children", label: "Children (ArrayObjectCell)", cell: ChildrenCell}
+			{name: "address", label: "Address", cell: AddressCell},
+			{name: "children", label: "Children", cell: ChildrenCell}
 		],
 		grid = new Backgrid.Grid({
 			columns: columns,

@@ -79,16 +79,18 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<h3>Example</h3>
-					<p>Data for this example is bootstrap-loaded in <code>people.js</code> and set in global <code>_people</code>.</p>
+					<h2>Example</h2>
+					<p>Click in the cells to edit them. The Address cell uses ObjectCell and ObjectCellEditor. The Children cell users ArrayObjectCell and ArrayObjectCellEditor.</p>
 				</div>
 			</div>
 			<div class="row">
 				<div id="result" class="col-md-12"></div>
 			</div>
+			<br/>
 			<div class="row">
 				<div class="col-md-12">
-					<h4>Code</h4>
+					<h2>Code</h2>
+					<p>Data for this example is bootstrap-loaded in <code>people.js</code> and set in global <code>_people</code>.</p>
 <pre>
 // Collection
 var people = new Backbone.Collection(_people);
@@ -152,10 +154,10 @@ $("#result").append($grid);
 
 			<div class="row">
 				<div class="col-md-12">
-					<h4>Bootstrap 2.3</h4>
+					<h2>Bootstrap 2.3</h2>
 					<p>
-						Bootstrap 2.3 use requires are change in modal and form templates.
-						Replace those using this code.
+						To use Backgrid Object Cell with Bootstrap 2.3, you must modify the HTML templates used to construct the modal dialog and form.
+						Use this code.
 					</p>
 <pre>
 Backgrid.Extension.ObjectCellEditor.prototype.modalTemplate = _.template([
