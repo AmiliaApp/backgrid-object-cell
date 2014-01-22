@@ -100,7 +100,7 @@
 				$dialog = this.$dialog;
 
 			// Show the Bootstrap modal dialog
-			$dialog.modal();
+			$dialog.modal({keyboard: false});
 
 			// Handle close and save events
 			$dialog.find('a.close').click(function(e) {
@@ -191,6 +191,7 @@
 	   The 
 	   Options:
 	     - formatter: Provide a fromRaw function to humanize.
+		 - backgrid: Backgrid grid class to instantiate. Defaults to Backgrid.Grid.
 	     - gridOptions: Backgrid options. Should include columns.
 	*/
 
@@ -212,8 +213,8 @@
 			var $dialog = this.$dialog = $(this.modalTemplate({title: column.get("label")}));
 
 			// Add the Backgrid Grid
-			var grid = this.objectGrid = new Backgrid.Grid(_.extend({collection: objectCollection}, gridOptions)),
-				$grid = this.$grid = grid.render().$el;
+			var grid = new this.backgrid(_.extend({collection: objectCollection}, gridOptions)),
+				$grid = grid.render().$el;
 			$dialog.find('div.modal-body').append($grid);
 
 			return this;
@@ -232,6 +233,7 @@
 
 	var ArrayObjectCell = Backgrid.Extension.ArrayObjectCell = Backgrid.Extension.ObjectCell.extend({
 		editorOptionDefaults: {
+			backgrid: Backgrid.Grid,
 			gridOptions: {}
 		},
 		formatter: {

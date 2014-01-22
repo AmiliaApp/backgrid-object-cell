@@ -33,6 +33,7 @@ $(document).ready(function() {
 			}
 		},
 		gridOptions: {
+			className: "backgrid table-bordered",
 			columns: [
 				{name: "firstName", label: "First Name", cell: "string"},
 				{name: "lastName", label: "Last Name", cell: "string"},
@@ -45,13 +46,13 @@ $(document).ready(function() {
 	var columns = [
 			{name: "firstName", label: "First Name", cell: "string"},
 			{name: "lastName", label: "Last Name", cell: "string"},
-			{name: "address", label: "Address", cell: AddressCell},
-			{name: "children", label: "Children", cell: ChildrenCell}
+			{name: "address", label: "Address (ObjectCell)", cell: AddressCell},
+			{name: "children", label: "Children (ArrayObjectCell)", cell: ChildrenCell}
 		],
 		grid = new Backgrid.Grid({
 			columns: columns,
 			collection: people,
-			className: "backgrid table"
+			className: "backgrid table-bordered"
 		}),
 		$grid = grid.render().$el;
 	$("#result").append($grid);

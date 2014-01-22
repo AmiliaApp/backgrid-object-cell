@@ -12,6 +12,7 @@
 		<script src="3rd/underscore.js" type="text/javascript"></script>
 		<script src="3rd/backbone.js" type="text/javascript"></script>
 		<script src="3rd/backgrid.js" type="text/javascript"></script>
+		<link href="3rd/backgrid.css" rel="stylesheet" type="text/css" charset="utf-8">
 		
 		<script src="backgrid-object-cell.js" type="text/javascript"></script>
 		<script src="people.js" type="text/javascript"></script>
@@ -32,21 +33,47 @@
 			<div class="row">
 				<div class="col-md-12">
 					<p>
-						Provides two new cell (with their editors) to render and edit an object or an array of objects.
-						
-						Client side drop-down filter for <a href="https://github.com/wyuenho/backgrid">Backgrid</a>. Inspired from <a href="https://github.com/wyuenho/backgrid-filter]">backgrid-filter</a>.
-						This Backgrid extension allows you to filter using a SELECT element. Works with pagination when passed a <a href="https://github.com/wyuenho/backbone-pageable/">Backbone.PageableCollection</a>. It is designed to work on the client-side but could be extended to work server-side as well.
-					</p>
+						Backgrid Object Cell extends <a href="http://backgridjs.com/" target="_blank">Backgrid</a> with two new cells along their editors to render and edit an object or an array of objects.
+						Editing is not done in the cell, but instead uses a <a href="http://getbootstrap.com/javascript/#modals" target="_blank">Bootstrap modal dialog</a> to display either a form, or another Backgrid.
+						Works with Bootstrap 3 out of the box. Can work with Bootstrap 2.3 (see note at bottom of the page).
 					<p>
-						This adds a new class <code>Backgrid.Extension.SelectFilter</code> which extends a <code>Backbone.View</code>. As such, you can pass its constructor default options like <code>className</code>.
+					<h2>Backgrid.Extension.ObjectCell</h2>
+					<p>
+						Use ObjectCell to render and edit an object in a Backgrid cell.
+						Rendering in the cell is done through the <code>fromRaw</code> function of the <code>formatter</code> option.
+						Editing is done with the ObjectCellEditor. It opens a Bootstrap modal dialog with a form.
+						Pass option <code>schema</code> to specify which object fields to edit.
+						Once editing is complete, your model gets updated. No updates occur if editing is canceled.
 					</p>
 					<h3>Options</h3>
 					<ul>
-						<li><strong>collection:</strong> An instance of a Backbone.Collection or a Backbone.PageableCollection.</li>
-						<li><strong>field:</strong> The Backbone model attribute to filter on.</li>
-						<li><strong>selectOptions:</strong> An array of option objects to create OPTIONs in the SELECT. Each option object must contain <em>value</em> and <em>label</em>.</li>
-						<li><strong>clearValue:</strong> Optional. Value to clear the filter. Defaults to <code>null</code>.</li>
-						<li><strong>initialValue:</strong> Optional. Value first selected. Defaults to <strong>clearValue</strong>.</li>
+						<li><strong>formatter:</strong> Provide a fromRaw function to humanize.</li>
+						<li>
+							<strong>schema:</strong> An array of field objects in the form <code>{name:'field attribute', label:'field label', ...}</code>.
+							Valid field attributes are:
+							<ul>
+								<li><strong>name:</strong> Name of object attribute to edit.</li>
+								<li><strong>label:</strong> Label to display in form.</li>
+								<li><strong>placeholder:</strong> Optional. Placeholder to put on input.</li>
+							</ul>
+						</li>
+					</ul>
+					<h2>Backgrid.Extension.ArrayObjectCell</h2>
+					<p>
+						Use ArrayObjectCell to render and edit an array of objects in a Backgrid cell.
+						Rendering in the cell is done through the <code>fromRaw</code> function of the <code>formatter</code> option.
+						Editing is done with the ObjectCellEditor. It opens a Bootstrap modal dialog with a Backgrid Grid to edit the array.
+						Each object becomes a row, and each object field a cell. Its using a Backgrid as an editor for a Cell.
+					</p>
+					<p>
+						Pass option <code>gridOptions</code> to specify Backgrid options. You must include <code>columns</code>.
+						Once editing is complete, your model gets updated. No updates occur if editing is cancelled.
+					</p>
+					<h3>Options</h3>
+					<ul>
+						<li><strong>formatter:</strong> Provide a fromRaw function to humanize.</li>
+						<li><strong>backgrid:</strong> The Backgrid grid class used to instantiate. Defaults to Backgrid.Grid. Use this if you have a custom grid.
+						<li><strong>gridOptions:</strong> The Backgrid options to pass. You must at least pass <code>columns</code>.</li>
 					</ul>
 				</div>
 			</div>
@@ -96,6 +123,7 @@ var ChildrenCell = Backgrid.Extension.ArrayObjectCell.extend({
 		}
 	},
 	gridOptions: {
+		className: "backgrid table-bordered",
 		columns: [
 			{name: "firstName", label: "First Name", cell: "string"},
 			{name: "lastName", label: "Last Name", cell: "string"},
@@ -114,7 +142,7 @@ var columns = [
 	grid = new Backgrid.Grid({
 		columns: columns,
 		collection: people,
-		className: "backgrid table"
+		className: "backgrid table-bordered"
 	}),
 	$grid = grid.render().$el;
 $("#result").append($grid);
