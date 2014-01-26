@@ -37,44 +37,27 @@
 						Editing is not done in the cell, but instead uses a <a href="http://getbootstrap.com/javascript/#modals" target="_blank">Bootstrap modal dialog</a> to display either a form, or another Backgrid.
 						Works with Bootstrap 3 out of the box. Can work with Bootstrap 2.3 (see note at bottom of the page).
 					<p>
-					<h2>Backgrid.Extension.ObjectCell</h2>
+					<h2>When to use</h2>
 					<p>
-						Use ObjectCell to render and edit an object in a Backgrid cell.
-						Rendering in the cell is done through the <code>fromRaw</code> function of the <code>formatter</code> option.
-						Editing is done with the ObjectCellEditor. It opens a Bootstrap modal dialog with a form.
-						Pass option <code>schema</code> to specify which object fields to edit.
-						Once editing is complete, your model gets updated. No updates occur if editing is canceled.
+						Say you have a collection People that you want to display in a table. You want to allow editing.
+						Each person has complex attributes: one contains the address in the form of an object,  and another contains the children in the form of a list of objects.
+						For example, here is one model of that collection:
 					</p>
-					<h3>Options</h3>
-					<ul>
-						<li><strong>formatter:</strong> Provide a fromRaw function to humanize.</li>
-						<li>
-							<strong>schema:</strong> An array of field objects in the form <code>{name:'field attribute', label:'field label', ...}</code>.
-							Valid field attributes are:
-							<ul>
-								<li><strong>name:</strong> Name of object attribute to edit.</li>
-								<li><strong>label:</strong> Label to display in form.</li>
-								<li><strong>placeholder:</strong> Optional. Placeholder to put on input.</li>
-							</ul>
-						</li>
-					</ul>
-					<h2>Backgrid.Extension.ArrayObjectCell</h2>
+<pre>
+{
+    id: 1,
+	firstName: "John",
+	lastName: "Doe",
+	address: {address1: "55 Yoyo street", address2: "apt. 2", city: "Wonderland", state: "Maryland"},
+	children:[
+		{firstName: "Max", lastName: "Doe", dob: "2004-01-04"},
+		{firstName: "Gena", lastName: "Doe", dob: "2002-06-20"}
+	]
+}
+</pre>
 					<p>
-						Use ArrayObjectCell to render and edit an array of objects in a Backgrid cell.
-						Rendering in the cell is done through the <code>fromRaw</code> function of the <code>formatter</code> option.
-						Editing is done with the ObjectCellEditor. It opens a Bootstrap modal dialog with a Backgrid Grid to edit the array.
-						Each object becomes a row, and each object field a cell. Its using a Backgrid as an editor for a Cell.
+						Backgrid Object Cell allows you to represent address in one cell, and children in once cell. Editing is done in a Bootstrap modal dialog.
 					</p>
-					<p>
-						Pass option <code>gridOptions</code> to specify Backgrid options. You must include <code>columns</code>.
-						Once editing is complete, your model gets updated. No updates occur if editing is cancelled.
-					</p>
-					<h3>Options</h3>
-					<ul>
-						<li><strong>formatter:</strong> Provide a fromRaw function to humanize.</li>
-						<li><strong>backgrid:</strong> The Backgrid grid class used to instantiate. Defaults to Backgrid.Grid. Use this if you have a custom grid.
-						<li><strong>gridOptions:</strong> The Backgrid options to pass. You must at least pass <code>columns</code>.</li>
-					</ul>
 				</div>
 			</div>
 			<div class="row">
@@ -86,7 +69,7 @@
 			<div class="row">
 				<div id="result" class="col-md-12"></div>
 			</div>
-			<br/>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<h2>Code</h2>
@@ -151,11 +134,56 @@ $("#result").append($grid);
 </pre>
 				</div>
 			</div>
-
+			<br/>
+			
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Backgrid.Extension.ObjectCell</h2>
+					<p>
+						Use ObjectCell to render and edit an object in a Backgrid cell.
+						Rendering in the cell is done through the <code>fromRaw</code> function of the <code>formatter</code> option.
+						Editing is done with the ObjectCellEditor. It opens a Bootstrap modal dialog with a form.
+						Pass option <code>schema</code> to specify which object fields to edit.
+						Once editing is complete, your model gets updated. No updates occur if editing is canceled.
+					</p>
+					<h3>Options</h3>
+					<ul>
+						<li><strong>formatter:</strong> Provide a fromRaw function to humanize.</li>
+						<li>
+							<strong>schema:</strong> An array of field objects in the form <code>{name:'field attribute', label:'field label', ...}</code>.
+							Valid field attributes are:
+							<ul>
+								<li><strong>name:</strong> Name of object attribute to edit.</li>
+								<li><strong>label:</strong> Label to display in form.</li>
+								<li><strong>placeholder:</strong> Optional. Placeholder to put on input.</li>
+							</ul>
+						</li>
+					</ul>
+					<h2>Backgrid.Extension.ArrayObjectCell</h2>
+					<p>
+						Use ArrayObjectCell to render and edit an array of objects in a Backgrid cell.
+						Rendering in the cell is done through the <code>fromRaw</code> function of the <code>formatter</code> option.
+						Editing is done with the ObjectCellEditor. It opens a Bootstrap modal dialog with a Backgrid Grid to edit the array.
+						Each object becomes a row, and each object field a cell. Its using a Backgrid as an editor for a Cell.
+					</p>
+					<p>
+						Pass option <code>gridOptions</code> to specify Backgrid options. You must include <code>columns</code>.
+						Once editing is complete, your model gets updated. No updates occur if editing is cancelled.
+					</p>
+					<h3>Options</h3>
+					<ul>
+						<li><strong>formatter:</strong> Provide a fromRaw function to humanize.</li>
+						<li><strong>backgrid:</strong> The Backgrid grid class used to instantiate. Defaults to Backgrid.Grid. Use this if you have a custom grid.
+						<li><strong>gridOptions:</strong> The Backgrid options to pass. You must at least pass <code>columns</code>.</li>
+					</ul>
+				</div>
+			</div>
+			<br/>
 			<div class="row">
 				<div class="col-md-12">
 					<h2>Bootstrap 2.3</h2>
 					<p>
+						Backgrid Object Cell is built for Bootstrap 3.
 						To use Backgrid Object Cell with Bootstrap 2.3, you must modify the HTML templates used to construct the modal dialog and form.
 						Use this code.
 					</p>
