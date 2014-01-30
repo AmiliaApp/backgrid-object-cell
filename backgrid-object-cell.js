@@ -115,6 +115,10 @@
 
       // Show the Bootstrap modal dialog
       $dialog.modal({keyboard: false});
+
+      // Hack to properly close the modal when clicking on the background.
+      $('.modal-backdrop').off().click(_.bind(editor.cancel, this));
+
       return $dialog;
     },
     save: function(options) {
