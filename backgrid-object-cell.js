@@ -85,7 +85,7 @@
       var $dialog = this.createDialog();
 
       // Add the Bootstrap form
-      var $form = $('<form class="form-horizontal">');
+      var $form = $('<form class="form-horizontal"></form>');
       $dialog.find('div.modal-body').append($form);
       _.each(this.schema, function(field) {
         if (!_.isObject(field) || !field.name || !field.label)
