@@ -66,8 +66,6 @@
     },
 
     render: function () {
-      // In the cell just show the humanized value
-      this.$el.text(this.formatter.fromRaw(this.model.get(this.column.get("name")), this.model));
       return this;
     },
     postRender: function(model, column) {
@@ -177,6 +175,12 @@
         if (column.get("name") == this.column.get("name"))
           editor.extendWithOptions(editorOptions);
       });
+    },
+    enterEditMode: function () {
+      var $content = this.$el.html();
+      Backgrid.Cell.prototype.enterEditMode.apply(this, arguments);
+      var editable = Backgrid.callByNeed(this.column.editable(), this.column, this.model);
+      if (editable) this.$el.html($content);
     }
   });
 
